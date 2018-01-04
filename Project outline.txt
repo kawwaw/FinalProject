@@ -1,0 +1,22 @@
+
+The project will be dealing with the educational system in Denmark. We will work with a dataset about the educational status of young people in Denmark (15-29 years old). 
+
+Our visualisations will illustrate: 
+
+How are the populations of young people passing through the educational system? 
+Is the pattern chancing over the years 2006-2017?
+Is there differences between the geographic regions?
+
+The dataset is the tsv-file HFUDD20.txt
+In addition there is a geojson file of the regions og Denmark
+
+
+
+
+
+Reference to the geojson file with danish regions.
+
+https://github.com/ok-dk/dagi/blob/master/geojson/regioner.geojson
+
+
+The dataset is from Statistics Denmark.  StatBank Denmark table HFUDD20 January 2018.
