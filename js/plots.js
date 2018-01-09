@@ -1,3 +1,3 @@
 
 
-alert("hello");
+console.log("final project");
