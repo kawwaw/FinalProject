@@ -51,7 +51,7 @@ h2, h3 {
 #temperature-change, #svg2, #r-plot ,#USA{
     text-align: center;
 }
-#svg2, #USA {
+#svg2, #mapsection {
     width: 100%;
     height: 500px;
 }
