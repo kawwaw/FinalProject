@@ -33,17 +33,43 @@ function init() {
         console.log(regions);
 
 
-        mapsvg.selectAll("path")
+        allpaths = mapsvg.selectAll("path")
             .data(regions.features)
             .enter()
             .append("path")
             .attr("d", path)
+            .attr("class", function(d){return d.properties.REGIONKODE})
             .style("fill", "lightgrey")
             .style("stroke", "grey")
             .style("stroke-width", 0.5);
 
+        console.log(allpaths);
+
+        allpaths
+            .data(regions.features)
+            .on("mouseover", function(d){
+                console.log(d.properties.REGIONKODE);
+                Action(d,"orange");
+            })
+            .on("mouseout", function(d) {
+                Action(d,"lightgrey");
+                });
+
+        var Action = function(d,c){
+            allpaths
+                .filter(function(v) {
+                    console.log(v.properties.REGIONKODE);
+                    return v.properties.REGIONKODE == d.properties.REGIONKODE; })
+                .style("fill",c);
+        }
+
+
+
 
     }
+
+
 }
+
 
 
