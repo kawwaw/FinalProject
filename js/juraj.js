@@ -26,7 +26,7 @@ var tooltip = d3.select("body").append("div")
 
 d3.queue()
     .defer(d3.json, 'regioner.geojson')
-    .defer(d3.tsv, 'HFUDD20.txt')
+    .defer(d3.tsv, 'HFUDD20raw1.txt')
     .defer(d3.tsv, 'edu-relative.txt')
     .await(ready);
 
