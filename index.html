@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Interactive Data Exploration |  Final Project</title>
+    <title>Interactive Data Exploration | Final Project</title>
 
     <link rel="stylesheet" type="text/css" href="style.css">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700,300" rel="stylesheet">
@@ -27,31 +27,42 @@
 <body>
     <h3>Final project</h3>
     <ul id="menu">
-	<li data-menuanchor="firstPage" class="active"><a href="#firstPage">First section</a></li>
-	<li data-menuanchor="secondPage"><a href="#secondPage">Second section</a></li>
-	<li data-menuanchor="thirdPage"><a href="#thirdPage">Third section</a></li>
-	<li data-menuanchor="fourthPage"><a href="#fourthPage">Fourth section</a></li>
+        <li data-menuanchor="firstPage" class="active">
+            <a href="#firstPage">First section</a>
+        </li>
+        <li data-menuanchor="secondPage">
+            <a href="#secondPage">Second section</a>
+        </li>
+        <li data-menuanchor="thirdPage">
+            <a href="#thirdPage">Third section</a>
+        </li>
+        <li data-menuanchor="fourthPage">
+            <a href="#fourthPage">Fourth section</a>
+        </li>
     </ul>
-      
+
     <div id="fullpage">
         <div class="section map">
-          
-          <section>
-          <svg id="mapsvg"></svg>
-          </section>
-        
-        
+            <section id="mapsection" class="map">
+                <svg id="mapsvg"></svg>
+            </section>
         </div>
-        <div id="highest-education-section" class="section">  
-          <section>
-            
-          <svg id="highest-education"></svg></div>
-          </section>
-          
-        <div class="section">Some section</div>
-        <div class="section">Some section</div>
+        <div class="section">
+            <section id="areachartsection" class="chart">
+                <svg id="areasvg"></svg>
+            </section>
+        </div>
+        <div class="section">
+            <section id="barchartsection" class="chart">
+                <svg id="barsvg"></svg>
+            </section>
+        </div>
+        <div class="section">
+            <section id="highest-education-section">
+                <svg id="highest-education"></svg>
+            </section>
+        </div>
     </div>
-
     <script src="js/plots.js"></script>
     <script src="js/juraj.js"></script>
     <script src="js/frederik.js"></script>
