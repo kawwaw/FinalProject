@@ -20,26 +20,12 @@ function init() {
     var areasvg = d3.select('#areasvg');
     var areaW = +areasvg.node().getBoundingClientRect().width;
     var areaH = +areasvg.node().getBoundingClientRect().height;
-    //Set up stack method
-    var stack = d3.stack()
-        .keys([ "H10 Primary education",
-            "H20 Upper secondary education",
-            "H30 Vocational Education and Training (VET)",
-            "H35 Qualifying educational programmes",
-            "H40 Short cycle higher education",
-            "H50 Vocational bachelors educations",
-            "H60 Bachelors programmes",
-            "H70 Masters programmes",
-            "H80 PhD programmes",
-            "H90 Not stated"
-        ]);
-    //Data, stacked
 
 
     d3.queue()
         .defer(d3.json, 'regioner.geojson')
         //.defer(d3.tsv, 'HFUDD20.txt')
-        .defer(d3.tsv, 'HFUDD20area2.txt')
+        .defer(d3.tsv, 'HFUDD20area3.txt')
         .await(ready);
 
     function ready(error, regions, area1) {
@@ -66,12 +52,15 @@ function init() {
         allpaths
             .data(regions.features)
             .on("mouseover", function(d){
-                //console.log(d.properties.REGIONKODE);
+                console.log(d.properties.REGIONNAVN);
                 Action(d,"orange");
             })
             .on("mouseout", function(d) {
                 Action(d,"lightgrey");
-                });
+                })
+            .on("click", function(d) {
+                UptateVisuals(d.properties.REGIONNAVN);
+            }  );
 
         var Action = function(d,c){
             allpaths
@@ -100,29 +89,42 @@ function init() {
             //d["land area"] = +d["land area"]; // if there are spaces in the property names
         });
 
+
+        var keys = ["H10", "H20", "H30","H35",  "H40", "H50", "H60","H70","H80","H90"]
+        console.log(keys);
+
         var stack = d3.stack()
-            .keys([ "H10", "H20", "H30","H35",  "H40", "H50", "H60","H70","H80","H90" ]);
+            .keys(keys);
 
         //Data, stacked
-        var series = stack(area1);
-        console.log(area1);
+
+        var selectedData = area1.filter(function(v) {
+            //console.log(v.region == "All Denmark");
+            //return v.region == "All Denmark";
+            return v.region == "Region Hovedstaden";
+        });
+
+        console.log(selectedData);
+
+        var series = stack(selectedData);
+        console.log(selectedData);
         console.log("series");
         console.log(series);
 
         //Set up scales
         var xScale = d3.scaleBand()
-            .domain(d3.range(area1.length))
-            .range([0, areaW])
+            .domain(d3.range(selectedData.length))
+            .range([0 + 40, areaW - 40])
             .paddingInner(0.05)
             ;
 
         var yScale = d3.scaleLinear()
             .domain([0,
-                d3.max(area1, function(d) {
+                d3.max(selectedData, function(d) {
                     return d.H10+d.H20+d.H30+d.H35+d.H40+d.H50+d.H60+d.H70+d.H80+d.H90;
                 })
             ])
-            .range([areaH,0])
+            .range([areaH - 40,40])
             .nice()
         ;
         //Easy colors accessible via a 10-step ordinal scale
@@ -178,16 +180,51 @@ function init() {
                 return colors(i);})
         ;
 
-        //Define Y axis
+        //Define axes
+        xAxis = d3.axisBottom()
+            .scale(xScale)
+            .tickFormat(function (d) {
+                //console.log("tjek_d" + d);
+                //console.log("tjek_area1" + area1[d].age);
+                return area1[d].age;
+            })
+            ;
+        xAxis2 = d3.axisBottom()
+            .scale(xScale)
+            .tickFormat(function (d) {
+                //console.log("tjek_d" + d);
+                //console.log("tjek_area1" + area1[d].time);
+                return area1[d].time;
+            })
+        ;
+
         yAxis = d3.axisLeft()
             .scale(yScale)
             .ticks(5);
 
+        //Create axes
         d3.select("#areasvg")
             .append("g")
             .attr("class", "axis")
-            //.attr("transform", "translate(" + (areaW) + ",0)")
-            .call(yAxis);
+            .attr("transform", "translate(" + -xScale(0)/2 + ",460)")
+            .call(xAxis)
+            .attr("stroke-width", 0)
+        ;
+
+        d3.select("#areasvg")
+            .append("g")
+            .attr("class", "axis")
+            .attr("transform", "translate(" + -xScale(0)/2 + ",480)")
+            .call(xAxis2)
+            .attr("stroke-width", 0)
+        ;
+        d3.select("#areasvg")
+            .append("g")
+            .attr("class", "axis")
+            .attr("transform", "translate(40,0)")
+            .call(yAxis)
+            .attr("stroke-width", 0)
+        ;
 
     }
 
