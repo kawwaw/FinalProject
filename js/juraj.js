@@ -1,5 +1,5 @@
 //highest fulfilled education dimensions
-var highestEdSvg = d3.select('#highest-education');
+var highestEdSvg = d3.select('#ongoing-education');
 margin = {top: 20, right: 20, bottom: 30, left: 50};
 var highestEdW = +highestEdSvg.node().getBoundingClientRect().width - margin.left - margin.right;
 var highestEdH = +highestEdSvg.node().getBoundingClientRect().height - margin.top - margin.bottom;
@@ -56,9 +56,6 @@ function ready(error, regions, data, edu) {
                 .duration(200)
                 .style("opacity", .9);
             yearWidth = highestEdW / (edu.length-1);
-            console.log(highestEdW);
-            console.log(edu.length-1);
-            console.log(yearWidth);
             year =  Math.floor(d3.event.pageX / yearWidth);
             tooltip.html("Education level: " + d.key + "<br/>" +
                 "Age: " + edu[year].Age + "<br/>" +
@@ -80,5 +77,62 @@ function ready(error, regions, data, edu) {
     g.append("g")
         .attr("class", "axis axis--y")
         .call(d3.axisLeft(y).ticks(10, "%"));
+
+    var selector = d3.select('#ongoing-education-map');
+    createMap(regions, selector);
+}
+
+//try to find a better solution without replicating code
+function createMap(regions, selector) {
+    var mapsvg = selector;
+    var mapW = +mapsvg.node().getBoundingClientRect().width;
+    var mapH = +mapsvg.node().getBoundingClientRect().height;
+
+    var Mercator = d3.geoMercator()
+        .translate([ mapW / 3, mapH / 2 ])
+        //.scale(150000)
+        .scale(3000)
+        //.center([  10.21076, 56.15674 ]); //Århus
+        .center([  10.21076, 56.2 ]); //Århus
+
+    //create path variable
+    var path = d3.geoPath()
+        .projection(Mercator);
+
+    var offsetMercator = Mercator.translate();
+
+    d3.queue()
+        .defer(d3.json, 'regioner.geojson')
+        .defer(d3.tsv, 'HFUDD20.txt')
+        .await(ready);
+
+    allpaths = mapsvg.selectAll("path")
+        .data(regions.features)
+        .enter()
+        .append("path")
+        .attr("d", path)
+        .attr("class", function (d) {
+            return d.properties.REGIONKODE
+        })
+        .style("fill", "lightgrey")
+        .style("stroke", "grey")
+        .style("stroke-width", 0.5);
+
+    allpaths
+        .data(regions.features)
+        .on("mouseover", function (d) {
+            Action(d, "orange");
+        })
+        .on("mouseout", function (d) {
+            Action(d, "lightgrey");
+        });
+
+    var Action = function (d, c) {
+        allpaths
+            .filter(function (v) {
+                return v.properties.REGIONKODE == d.properties.REGIONKODE;
+            })
+            .style("fill", c);
+    };
 
 }
