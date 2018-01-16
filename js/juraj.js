@@ -26,7 +26,7 @@ var tooltip = d3.select("body").append("div")
 
 d3.queue()
     .defer(d3.json, 'regioner.geojson')
-    .defer(d3.tsv, 'HFUDD20.txt')
+    .defer(d3.tsv, 'HFUDD20raw1.txt')
     .defer(d3.tsv, 'edu-relative.txt')
     .await(ready);
 
@@ -101,18 +101,13 @@ function createMap(regions, selector) {
 
     var offsetMercator = Mercator.translate();
 
-    d3.queue()
-        .defer(d3.json, 'regioner.geojson')
-        .defer(d3.tsv, 'HFUDD20.txt')
-        .await(ready);
-
     allpaths = mapsvg.selectAll("path")
         .data(regions.features)
         .enter()
         .append("path")
         .attr("d", path)
         .attr("class", function (d) {
-            return d.properties.REGIONKODE
+            return "region" + d.properties.REGIONKODE
         })
         .style("fill", "lightgrey")
         .style("stroke", "grey")
@@ -121,10 +116,12 @@ function createMap(regions, selector) {
     allpaths
         .data(regions.features)
         .on("mouseover", function (d) {
-            Action(d, "orange");
+            var className = ".region" + d.properties.REGIONKODE;
+            d3.selectAll(className).style("fill", "orange");
         })
         .on("mouseout", function (d) {
-            Action(d, "lightgrey");
+            var className = ".region" + d.properties.REGIONKODE;
+            d3.selectAll(className).style("fill", "lightgrey");
         });
 
     var Action = function (d, c) {

@@ -3,11 +3,12 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Interactive Data Exploration |  Final Project</title>
+    <title>Interactive Data Exploration | Final Project</title>
 
     <link rel="stylesheet" type="text/css" href="style.css">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700,300" rel="stylesheet">
-
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script type="text/javascript" src="jquery.fullPage.js"></script>
     <script src="https://d3js.org/d3.v4.min.js"></script>
     <script src="https://d3js.org/d3-interpolate.v1.min.js"></script>
     <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
@@ -25,25 +26,53 @@
 
 <body>
     <h3>Final project</h3>
-    <section id="mapsection" class="map">
-        <svg id="mapsvg"></svg>
-    </section>
+    <ul id="menu">
+        <li data-menuanchor="first" class="active">
+            <a href="#first">First section</a>
+        </li>
+        <li data-menuanchor="second">
+            <a href="#second">Second section</a>
+        </li>
+        <li data-menuanchor="third">
+            <a href="#third">Third section</a>
+        </li>
+        <li data-menuanchor="fourth">
+            <a href="#fourth">Fourth section</a>
+        </li>
+    </ul>
 
-    <section id="highest-education-section">
-        <svg id="ongoing-education"></svg>
-
-        <!--copy this section to get the selectors-->
-        <div id="ongoing-education-selector" class="selector">
-            <h3>Select a Region on the Map</h3>
-            <svg id="ongoing-education-map"></svg>
-            <img src="images/female-avatar.png"/>
-            <img src="images/male-avatar.png"/>
+    <div id="fullpage">
+        <div class="section map">
+            <section id="mapsection" class="map">
+                <svg id="mapsvg"></svg>
+            </section>
         </div>
-        <!---->
+        <div class="section">
+            <section id="areachartsection" class="chart">
+                <svg id="areasvg"></svg>
+            </section>
+        </div>
+        <div class="section">
+            <section id="highest-education-section">
+                <svg id="ongoing-education"></svg>
 
-    </section>
+                <!--copy this section to get the selectors-->
+                <div id="ongoing-education-selector" class="selector">
+                    <h3>Select a Region on the Map</h3>
+                    <svg id="ongoing-education-map"></svg>
+                    <img src="images/female-avatar.png"/>
+                    <img src="images/male-avatar.png"/>
+                </div>
+                <!---->
 
-
+            </section>
+        </div>
+        <div class="section">
+            <section id="description">
+              Some text
+            </section>
+        </div>
+    </div>
     <script src="js/plots.js"></script>
     <script src="js/juraj.js"></script>
     <script src="js/frederik.js"></script>
