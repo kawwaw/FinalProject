@@ -1,3 +1,4 @@
+
 $(document).ready(function() {
     $('#fullpage').fullpage({
         // Navigation
@@ -13,14 +14,6 @@ $(document).ready(function() {
     });
 
     frederik();
-
-
-    $('#level-menu li').click(function() {
-        // remove classes from all
-        $('#level-menu li').removeClass('active');
-        // add class to the one we clicked
-        $(this).addClass('active');
-    });
 });
 
 
@@ -44,7 +37,6 @@ function frederik() {
     d3.json('regioner.geojson', function(error, data) {
 
         if (error) throw error;
-        var selectedLevel = '';
         var regionColors = {
             1081: 'red',
             1082: 'green',
@@ -53,9 +45,18 @@ function frederik() {
             1085: 'magenta',
         };
 
-        d3.select('#level-menu li').on('click', function(e) {
-            console.log(e);
+
+        // set the selected menu item to selectedLevel
+        var selectedLevel = '';
+        $('#level-menu li').click(function() {
+            // remove classes from all
+            $('#level-menu li').removeClass('active');
+            // add class to the one we clicked
+            $(this).addClass('active');
+            selectedLevel = $(this).find('a').data('value');
+            console.log(selectedLevel);
         });
+
 
         svg.append('g')
             .selectAll('path')
