@@ -160,7 +160,7 @@ li {
     transition-duration: 0.2s;
 }
 .area:hover {
-    fill: #FFEB3B !important;
+    opacity: 0.7;
     -webkit-transition-duration: 0.5s;
     -moz-transition-duration: 0.5s;
     -ms-transition-duration: 0.5s;
@@ -181,7 +181,7 @@ li {
 #ongoing-education-selector img {
     width: 128px;
     height: 128px;
-    padding: 24px;
+    margin: 24px;
     -webkit-transition-duration: 0.2s;
     -moz-transition-duration: 0.2s;
     -ms-transition-duration: 0.2s;
@@ -191,12 +191,17 @@ li {
 #ongoing-education-selector img:hover {
     width: 136px;
     height: 136px;
-    margin: -4px;
+    margin: 20px;
     -webkit-transition-duration: 0.2s;
     -moz-transition-duration: 0.2s;
     -ms-transition-duration: 0.2s;
     -o-transition-duration: 0.2s;
     transition-duration: 0.2s;
+}
+.avatar {
+    border-radius: 50%;
+    border: 5px solid;
+    border-color: transparent;
 }
 #ongoing-education-map {
     width: 100%;
