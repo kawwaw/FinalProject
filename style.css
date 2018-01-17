@@ -249,6 +249,7 @@ div.tooltip {
 }
 #level-menu {
   width: 15%;
+  padding:0;
 }
 #level-menu li {
   list-style: none;
@@ -268,4 +269,14 @@ div.tooltip {
 }
 #level-menu li:hover {
   border: 1px solid black;
+}
+#region-map {
+  width: 43%;
+  float: left;
+}
+#region-menu {
+  width: 43%;
+  float:right;
+  margin-top: 300px;
+  text-align: left;
 }
