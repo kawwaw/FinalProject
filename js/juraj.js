@@ -4,8 +4,8 @@ margin = {top: 20, right: 20, bottom: 30, left: 50};
 var highestEdW = +highestEdSvg.node().getBoundingClientRect().width - margin.left - margin.right;
 var highestEdH = +highestEdSvg.node().getBoundingClientRect().height - margin.top - margin.bottom;
 
-selectedRegion = "All Denmark";
-selectedGender = "All";
+selectedRegion = getPrettyString("All Denmark");
+selectedGender = "Total";
 
 //highest fulfilled education scales
 var x = d3.scaleLinear().range([0, highestEdW]),
@@ -16,7 +16,7 @@ var stack = d3.stack();
 
 var area = d3.area()
     .curve(d3.curveNatural)
-    .x(function(d, i) { return x(d.data.Age); })
+    .x(function(d, i) { return x(d.data.age); })
     .y0(function(d) { return y(d[0]); })
     .y1(function(d) { return y(d[1]); });
 
@@ -31,8 +31,7 @@ var tooltip = d3.select("body").append("div")
 d3.queue()
     .defer(d3.json, 'regioner.geojson')
     .defer(d3.tsv, 'HFUDD20raw1.txt')
-    .defer(d3.tsv, 'edu-relative.txt')
-    .defer(d3.tsv, 'data/edu-relative-demo.txt')
+    .defer(d3.tsv, 'data/juraj.txt')
     .await(ready);
 
 function update(data) {
@@ -42,15 +41,16 @@ function update(data) {
         .attr("d", area);
 }
 
-function ready(error, regions, data, edu, edu_demo) {
+function ready(error, regions, data, edu) {
     if (error) {
         throw error;
     }
 
     //    highest education chart
-    var keys = edu.columns.slice(1);
+    var keys = edu.columns.slice(5);
+    var years = d3.range(18, 30);
 
-    x.domain(d3.extent(edu_demo, function(d) { return d.Age; }));
+    x.domain(d3.extent(edu, function(d) { return d.age; }));
     z.domain(keys);
     stack.keys(keys);
 
@@ -64,7 +64,8 @@ function ready(error, regions, data, edu, edu_demo) {
         .call(d3.axisLeft(y).ticks(10, "%"));
 
     var layer = g.selectAll(".layer")
-        .data(stack(edu_demo.filter(function (d) { return d.Gender === selectedGender && d.Region === selectedRegion; })))
+        .data(stack(edu.filter(function (d) { return d.sex === selectedGender
+            && getPrettyString(d.region) === selectedRegion})))
         .enter().append("g")
         .attr("class", "layer");
 
@@ -78,10 +79,11 @@ function ready(error, regions, data, edu, edu_demo) {
                 .style("opacity", .9);
             var t = d3.select('.axis--x');
             gWidth = +t.node().getBoundingClientRect().width;
-            yearWidth = gWidth / (edu_demo.length/6-1);
+            //30 = 5 regions * 6 values
+            yearWidth = gWidth / (edu.length/18-1);
             year = Math.floor((d3.event.pageX - yearWidth / 2) / yearWidth);
             tooltip.html("Education level: " + d.key + "<br/>" +
-                "Age: " + edu_demo[year*6].Age + "<br/>" +
+                "Age: " + years[year] + "<br/>" +
                 +( (d[year][1] - d[year][0]) * 100).toFixed(2) + "%")
                 .style("left", (d3.event.pageX) + "px")
                 .style("top", (d3.event.pageY - 90) + "px");
@@ -94,12 +96,13 @@ function ready(error, regions, data, edu, edu_demo) {
 
 
     var selector = d3.select('#ongoing-education-map');
-    createMap(regions, edu_demo, selector);
+    createMap(regions, edu, selector);
 
     d3.select("#male-avatar")
         .on("click", function (d) {
             selectedGender = "Men";
-            update(stack(edu_demo.filter(function (d) { return d.Gender === selectedGender && d.Region === selectedRegion; })));
+            update(stack(edu.filter(function (d) { return d.sex === selectedGender
+                && getPrettyString(d.region) === selectedRegion})));
             d3.select(this).style("border-color", "#FFEB3B");
             d3.select("#female-avatar").style("border-color", "transparent");
         });
@@ -108,16 +111,21 @@ function ready(error, regions, data, edu, edu_demo) {
     d3.select("#female-avatar")
         .on("click", function (d) {
             selectedGender = "Women";
-            update(stack(edu_demo.filter(function (d) { return d.Gender === selectedGender && d.Region === selectedRegion; })));
+            update(stack(edu.filter(function (d) { return d.sex === selectedGender
+                && getPrettyString(d.region) === selectedRegion})));
             d3.select(this).style("border-color", "#FFEB3B");
             d3.select("#male-avatar").style("border-color", "transparent");
         });
 
     d3.select("#reset-ongoing-plot")
         .on("click", function (d) {
-            selectedGender = "All";
-            selectedRegion = "All Denmark";
-            update(stack(edu_demo.filter(function (d) { return d.Gender === selectedGender && d.Region === selectedRegion; })));
+            var className = "." + selectedRegion;
+            d3.selectAll(className).style("fill", "lightgrey");
+
+            selectedGender = "Total";
+            selectedRegion = getPrettyString("All Denmark");
+            update(stack(edu.filter(function (d) { return d.sex === selectedGender
+                && getPrettyString(d.region) === selectedRegion})));
             d3.select("#female-avatar").style("border-color", "transparent");
             d3.select("#male-avatar").style("border-color", "transparent");
         });
@@ -148,7 +156,7 @@ function createMap(regions, data, selector) {
         .append("path")
         .attr("d", path)
         .attr("class", function (d) {
-            return "region" + d.properties.REGIONKODE
+            return getPrettyRegionName(d)
         })
         .style("fill", "lightgrey")
         .style("stroke", "grey")
@@ -157,19 +165,25 @@ function createMap(regions, data, selector) {
     allpaths
         .data(regions.features)
         .on("mouseover", function (d) {
-            var className = ".region" + d.properties.REGIONKODE;
+            var className = "." + getPrettyRegionName(d);
             d3.selectAll(className).style("fill", "orange");
         })
         //check selected region before setting fill back to default
         .on("mouseout", function (d) {
-            var className = ".region" + d.properties.REGIONKODE;
-            d3.selectAll(className).style("fill", "lightgrey");
+            if(getPrettyRegionName(d) !== selectedRegion) {
+                var className = "." + getPrettyRegionName(d);
+                d3.selectAll(className).style("fill", "lightgrey");
+            }
         })
         .on("click", function (d) {
-            selectedRegion = d.properties.REGIONNAVN;
-            update(stack(data.filter(function (d) { return d.Gender === selectedGender && d.Region === selectedRegion; })));
+            var className = "." + selectedRegion;
+            d3.selectAll(className).style("fill", "lightgrey");
 
-            var className = ".region" + d.properties.REGIONKODE;
+            selectedRegion = getPrettyRegionName(d);
+            update(stack(data.filter(function (d) { return d.sex === selectedGender
+                && getPrettyString(d.region) === selectedRegion})));
+
+            className = "." + getPrettyRegionName(d);
             d3.selectAll(className).style("fill", "orange");
         });
 
@@ -181,4 +195,12 @@ function createMap(regions, data, selector) {
             .style("fill", c);
     };
 
+}
+
+function getPrettyRegionName(d) {
+    return d.properties.REGIONNAVN.toLowerCase().replace(/ /g, '');
+}
+
+function getPrettyString(string) {
+    return string.toLowerCase().replace(/ /g, '');
 }
