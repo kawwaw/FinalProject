@@ -47,7 +47,7 @@ function ready(error, regions, data, edu) {
     }
 
     //    highest education chart
-    var keys = edu.columns.slice(5);
+    var keys = edu.columns.slice(4);
     var years = d3.range(18, 30);
 
     x.domain(d3.extent(edu, function(d) { return d.age; }));
@@ -71,7 +71,7 @@ function ready(error, regions, data, edu) {
 
     layer.append("path")
         .attr("class", "area")
-        .style("fill", function(d) { return z(d.key); })
+        .style("fill", function(d, i) { return z(i); })
         .attr("d", area)
         .on("mousemove", function(d, i) {
             tooltip.transition()
@@ -129,6 +129,50 @@ function ready(error, regions, data, edu) {
             d3.select("#female-avatar").style("border-color", "transparent");
             d3.select("#male-avatar").style("border-color", "transparent");
         });
+
+    var svgLegend = d3.select("#ongoing-education-legend").append("svg")
+        .attr("width", highestEdW)
+        .attr("height", 50);
+
+    var dataL = 20;
+    var offset = highestEdW / keys.length;
+
+    var legend = svgLegend.selectAll('#ongoing-education-legend')
+        .data(keys)
+        .enter().append('g')
+        .attr("transform", function (d, i) {
+            if (i === 0) {
+                return "translate(30,0)"
+            } else {
+                dataL += offset;
+                return "translate(" + (dataL) + ",0)"
+            }
+        });
+
+    legend.append('circle')
+        .attr("cx", 0)
+        .attr("cy", 8)
+        .attr("r", 8)
+        .style("fill", function (d, i) {
+            return z(i)
+        })
+        .append("svg:title")
+            .text(function (d) {
+                return d;
+            });
+
+    legend.append('text')
+        .attr("x", 20)
+        .attr("y", 12)
+        .text(function (d, i) {
+            return d.substr(0, 3)
+        })
+        .style("text-anchor", "start")
+        .style("font-size", 15)
+        .append("svg:title")
+        .text(function (d) {
+            return d;
+        });
 }
 
 //try to find a better solution without replicating code
@@ -139,10 +183,8 @@ function createMap(regions, data, selector) {
 
     var Mercator = d3.geoMercator()
         .translate([ mapW / 3, mapH / 2 ])
-        //.scale(150000)
         .scale(3000)
-        //.center([  10.21076, 56.15674 ]); //Århus
-        .center([  10.21076, 56.2 ]); //Århus
+        .center([  10.21076, 56.2 ]);
 
     //create path variable
     var path = d3.geoPath()
@@ -165,6 +207,7 @@ function createMap(regions, data, selector) {
     allpaths
         .data(regions.features)
         .on("mouseover", function (d) {
+            // console.log(getPrettyRegionName(d));
             var className = "." + getPrettyRegionName(d);
             d3.selectAll(className).style("fill", "orange");
         })
@@ -180,7 +223,8 @@ function createMap(regions, data, selector) {
             d3.selectAll(className).style("fill", "lightgrey");
 
             selectedRegion = getPrettyRegionName(d);
-            update(stack(data.filter(function (d) { return d.sex === selectedGender
+
+            update(stack(data.filter(function (d) { console.log(getPrettyString(d.region)); return d.sex === selectedGender
                 && getPrettyString(d.region) === selectedRegion})));
 
             className = "." + getPrettyRegionName(d);
@@ -198,9 +242,9 @@ function createMap(regions, data, selector) {
 }
 
 function getPrettyRegionName(d) {
-    return d.properties.REGIONNAVN.toLowerCase().replace(/ /g, '');
+    return d.properties.REGIONNAVN.toLowerCase().replace(/ /g, '').replace('æ','ae');
 }
 
 function getPrettyString(string) {
-    return string.toLowerCase().replace(/ /g, '');
+    return string.toLowerCase().replace(/ /g, '').replace('æ','ae');
 }

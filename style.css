@@ -55,7 +55,6 @@ h2, h3 {
 #USA {
     text-align: center;
 }
-
 #svg2,
 #mapsection,
 #highest-education-section {
@@ -168,8 +167,8 @@ li {
     transition-duration: 0.5s;
 }
 #ongoing-education {
-    width: 66%;
-    height: 560px;
+    width: 100%;
+    height: 500px;
     float: left;
 }
 #ongoing-education-selector {
@@ -177,8 +176,9 @@ li {
     float: right;
     height: calc(100% - 48px);
     padding: 24px;
+    position: relative;
 }
-#ongoing-education-selector img {
+#ongoing-education-selector .avatar {
     width: 128px;
     height: 128px;
     margin: 24px;
@@ -188,7 +188,7 @@ li {
     -o-transition-duration: 0.2s;
     transition-duration: 0.2s;
 }
-#ongoing-education-selector img:hover {
+#ongoing-education-selector .avatar:hover {
     width: 136px;
     height: 136px;
     margin: 20px;
@@ -202,10 +202,44 @@ li {
     border-radius: 50%;
     border: 5px solid;
     border-color: transparent;
+    cursor: pointer;
 }
 #ongoing-education-map {
     width: 100%;
     height: 300px;
+}
+#ongoing-education-legend {
+    width: 100%;
+    height: 50px;
+    padding-top: 16px;
+    float: left;
+}
+.plot-container {
+    width: 66%;
+    float: left;
+}
+#reset-ongoing-plot {
+    width: 24px;
+    height: 24px;
+    bottom: 80px;
+    left: calc(50% - 12px);
+    position: absolute;
+    -webkit-transition-duration: 0.2s;
+    -moz-transition-duration: 0.2s;
+    -ms-transition-duration: 0.2s;
+    -o-transition-duration: 0.2s;
+    transition-duration: 0.2s;
+    cursor: pointer;
+}
+#reset-ongoing-plot:hover {
+    width: 30px;
+    height: 30px;
+    margin: -3px;
+    -webkit-transition-duration: 0.3s;
+    -moz-transition-duration: 0.3s;
+    -ms-transition-duration: 0.3s;
+    -o-transition-duration: 0.3s;
+    transition-duration: 0.3s;
 }
 div.tooltip {
     position: absolute;
