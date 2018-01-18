@@ -54,14 +54,17 @@
         </div>
         <div class="section">
             <section id="highest-education-section">
-                <svg id="ongoing-education"></svg>
+                <div class="plot-container">
+                    <svg id="ongoing-education"></svg>
+                    <div id="ongoing-education-legend"></div>
+                </div>
                 <div id="ongoing-education-selector" class="selector">
                     <h3>Select a Region on the Map</h3>
                     <svg id="ongoing-education-map"></svg>
-                    <img class="avatar" id="female-avatar" src="images/female-avatar.png"/>
+                    <img class="avatar" id="female-avatar" src="images/female-avatar.png" title="Female"/>
                     <!--this is just for debugging; will be replaced by a proper button-->
-                    <div id="reset-ongoing-plot" style="background: black; width: 24px; height: 24px; margin: -12px; float: left;"></div>
-                    <img class="avatar" id="male-avatar" src="images/male-avatar.png"/>
+                    <img id="reset-ongoing-plot" src="images/close.svg" title="Reset visualization"></img>
+                    <img class="avatar" id="male-avatar" src="images/male-avatar.png" title="Male"/>
                 </div>
             </section>
         </div>
