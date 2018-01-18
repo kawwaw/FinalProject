@@ -43,13 +43,29 @@
 
     <div id="fullpage">
         <div class="section map">
-            <section id="mapsection" class="map">
-                <svg id="mapsvg"></svg>
+
+            <section id="introduction" class="map">
+
+
             </section>
         </div>
         <div class="section">
             <section id="areachartsection" class="chart">
-                <svg id="areasvg"></svg>
+                <div class="plot-container">
+                    <svg id="areasvg"></svg>
+                    <div id="area-education-legend"></div>
+                </div>
+                <div id="area-education-selector" class="selector">
+                    <h3>Select Region and Gender</h3>
+                    <h3>Use the deselect buttom to return to the whole danish population</h3>
+                    <svg id="mapsvg"></svg>
+                    <img class="avatar" id="female-avatarKW" src="images/female-avatar.png" title="Female"/>
+                    <!--this is just for debugging; will be replaced by a proper button-->
+                    <img id="reset-ongoing-plot" src="images/close.svg" title="Reset visualization"></img>
+                    <img class="avatar" id="male-avatarKW" src="images/male-avatar.png" title="Male"/>
+                </div>
+
+
             </section>
         </div>
         <div class="section">

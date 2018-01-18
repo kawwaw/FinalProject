@@ -16,10 +16,19 @@ function init() {
                    .projection(Mercator);
     var offsetMercator = Mercator.translate();
 
+
     // settings for the stacked area map
     var areasvg = d3.select('#areasvg');
     var areaW = +areasvg.node().getBoundingClientRect().width;
     var areaH = +areasvg.node().getBoundingClientRect().height;
+
+
+    var keys = ['H10', 'H20', 'H30', 'H35', 'H40', 'H50', 'H60', 'H70', 'H80', 'H90']
+    console.log(keys);
+
+    var stack = d3.stack()
+        .keys(keys);
+
 
 
     d3.queue()
@@ -37,7 +46,7 @@ function init() {
         //console.log(regions);
 
 
-        allpaths = mapsvg.selectAll('path')
+        allpathsKW = mapsvg.selectAll('path')
                        .data(regions.features)
                        .enter()
                        .append('path')
@@ -49,7 +58,7 @@ function init() {
 
         //console.log(allpaths);
 
-        allpaths
+        allpathsKW
             .data(regions.features)
             .on('mouseover', function(d) {
                 console.log(d.properties.REGIONNAVN);
@@ -59,16 +68,46 @@ function init() {
                 Action(d, 'lightgrey');
             })
             .on('click', function(d) {
-                UptateVisuals(d.properties.REGIONNAVN);
+                UptateVisuals(area1, d.properties.REGIONNAVN);
+                console.log("klik");
             });
 
         var Action = function(d, c) {
-            allpaths
+            allpathsKW
                 .filter(function(v) {
                     //console.log(v.properties.REGIONKODE);
                     return v.properties.REGIONKODE == d.properties.REGIONKODE; })
                 .style('fill', c);
         }
+// d er regionsnavn
+        var UptateVisuals = function(area1, regnavn) {
+            var selection = area1.filter(function(v) {
+                console.log(v.region);
+                return v.region == regnavn;
+                //return v.region == 'Region Hovedstaden';
+            });
+            console.log("selectiontjek");
+            console.log(selection);
+
+            var series = stack(selection);
+
+            console.log("seriestjek");
+            console.log(series);
+
+            var areapaths = d3.select('#areasvg')
+                .selectAll('path')
+                .data(series)
+                .enter()
+                .append('path')
+                .attr('class', 'areaKW')
+                .attr('d', areaToPlot)
+                .style('fill', function(d, i) { return colors(i); });
+
+
+
+
+        }
+
 
         makeAreaPlot(area1);
     }
@@ -90,18 +129,15 @@ function init() {
         });
 
 
-        var keys = ['H10', 'H20', 'H30', 'H35', 'H40', 'H50', 'H60', 'H70', 'H80', 'H90']
-        console.log(keys);
+        //Data, stackedareas
 
-        var stack = d3.stack()
-                        .keys(keys);
 
-        //Data, stacked
+
 
         var selectedData = area1.filter(function(v) {
             //console.log(v.region == "All Denmark");
-            //return v.region == "All Denmark";
-            return v.region == 'Region Hovedstaden';
+            return v.region == "All Denmark";
+            //return v.region == 'Region Hovedstaden';
         });
 
         console.log(selectedData);
@@ -123,45 +159,21 @@ function init() {
                                   })])
                          .range([areaH - 40, 40])
                          .nice();
-        //Easy colors accessible via a 10-step ordinal scale
+
+        //color scale
         var colors = d3.scaleOrdinal(d3.schemeCategory10);
-
-        //Create SVG element
-        var groups = d3.select('#barsvg')
-                         .selectAll('g')
-                         .data(series)
-                         .enter()
-                         .append('g')
-                         .style('fill', function(d, i) { return colors(i); });
-
-        // Add a rect for each data value
-        var rects = groups.selectAll('rect')
-                        .data(function(d) {
-                //console.log(d);
-                return d; })
-                        .enter()
-                        .append('rect')
-                        .attr('x', function(d, i) {
-                            return xScale(i);
-
-                        })
-                        .attr('y', function(d) {
-                            return yScale(d[1]);
-                        })
-                        .attr('height', function(d) {
-                            return yScale(d[0]) - yScale(d[1]);
-                        })
-                        .attr('width', xScale.bandwidth());
-
 
         //Define area generator
         areaToPlot = d3.area()
-                         .x(function(d, i) {
-               // console.log("d");
-               // console.log(d);
+            .x(function(d, i) {
+                // console.log("d");
+                // console.log(d);
                 return xScale(i); })
-                         .y0(function(d) { return yScale(d[0]); })
-                         .y1(function(d) { return yScale(d[1]); });
+            .y0(function(d) { return yScale(d[0]); })
+            .y1(function(d) { return yScale(d[1]); })
+        ;
+
+
 
         var areapaths = d3.select('#areasvg')
                             .selectAll('path')
