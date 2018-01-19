@@ -24,12 +24,8 @@ function init() {
 
 
     var keys = ['H10', 'H20', 'H30', 'H35', 'H40', 'H50', 'H60', 'H70', 'H80', 'H90']
-    console.log(keys);
-
     var stack = d3.stack()
         .keys(keys);
-
-
 
     d3.queue()
         .defer(d3.json, 'regioner.geojson')
@@ -45,7 +41,7 @@ function init() {
         console.log(area1);
         //console.log(regions);
 
-
+        // create selector map of Denmark
         allpathsKW = mapsvg.selectAll('path')
                        .data(regions.features)
                        .enter()
@@ -55,8 +51,6 @@ function init() {
                        .style('fill', 'lightgrey')
                        .style('stroke', 'grey')
                        .style('stroke-width', 0.5);
-
-        //console.log(allpaths);
 
         allpathsKW
             .data(regions.features)
@@ -86,6 +80,7 @@ function init() {
                 return v.region == regnavn;
                 //return v.region == 'Region Hovedstaden';
             });
+
             console.log("selectiontjek");
             console.log(selection);
 
@@ -97,11 +92,8 @@ function init() {
             var areapaths = d3.select('#areasvg')
                 .selectAll('path')
                 .data(series)
-                .enter()
-                .append('path')
-                .attr('class', 'areaKW')
                 .attr('d', areaToPlot)
-                .style('fill', function(d, i) { return colors(i); });
+                ;
 
 
 
