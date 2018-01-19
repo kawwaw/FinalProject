@@ -122,7 +122,7 @@ function frederik() {
                     return color(regionToValue[d.properties.REGIONNAVN]);
                 });
         });
-
+        
         var regionToValue = filterByLevelAndGender('H10', 'A');
 
         svg.append('g')
@@ -131,7 +131,7 @@ function frederik() {
             .enter()
             .append('path')
             .style('fill', function(d) {
-                return color(regionToValue[d.properties.REGIONNAVN] / 700);
+                return color(regionToValue[d.properties.REGIONNAVN]);
             })
             .style('stroke', 'black')
             .style('stroke-width', 1)
