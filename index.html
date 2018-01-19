@@ -6,7 +6,7 @@
     <title>Interactive Data Exploration | Final Project</title>
 
     <link rel="stylesheet" type="text/css" href="style.css">
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700,300" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700,300||Roboto:100" rel="stylesheet">
     <script src="jquery-3.2.1.min.js"></script>
     <script type="text/javascript" src="jquery.fullpage.js"></script>
     <script src="https://d3js.org/d3.v4.min.js"></script>
@@ -33,7 +33,7 @@
             <a href="#second">Second section</a>
         </li>
         <li data-menuanchor="third">
-            <a href="#third">Third section</a>
+            <a href="#third">Ongoing Education</a>
         </li>
         <li data-menuanchor="fourth">
             <a href="#fourth">Fourth section</a>
@@ -41,11 +41,15 @@
     </ul>
 
     <div id="fullpage">
-        <div class="section map">
-
-            <section id="introduction" class="map">
-
-
+        <div class="section">
+            <section id="introduction">
+                <h1>Visualising Education in Denmark</h1>
+                <div class="divider"></div>
+                <p>
+                    On this page, we follow a cohort of Danish population born in 1988 and their journey through the educational system
+                    between the years 2006 when they reached adulthood and 2017 when only about a fifth of the studied group were still in education.
+                </p>
+                <div class="divider"></div>
             </section>
         </div>
         <div class="section">
@@ -59,7 +63,6 @@
                     <h3>Use the deselect buttom to return to the whole danish population</h3>
                     <svg id="mapsvg"></svg>
                     <img class="avatar" id="female-avatarKW" src="images/female-avatar.png" title="Female"/>
-                    <!--this is just for debugging; will be replaced by a proper button-->
                     <img id="reset-ongoing-plot" src="images/close.svg" title="Reset visualization"></img>
                     <img class="avatar" id="male-avatarKW" src="images/male-avatar.png" title="Male"/>
                 </div>
@@ -77,12 +80,47 @@
                     <h3>Select a Region on the Map</h3>
                     <svg id="ongoing-education-map"></svg>
                     <img class="avatar" id="female-avatar" src="images/female-avatar.png" title="Female"/>
-                    <img id="reset-ongoing-plot" src="images/close.svg" title="Reset visualization"></img>
+                    <img id="reset-ongoing-edu-plot" src="images/close.svg" title="Reset visualization"></img>
                     <img class="avatar" id="male-avatar" src="images/male-avatar.png" title="Male"/>
                 </div>
                 <div class="description-container light-green">
                     <h2>Description</h2>
-                    <p>The description of the visualisation goes here</p>
+                    <p>
+                        This visualisation shows the relative number of Danish residents born in 1988 attending each of the
+                        educational levels recognised in Denmark, from Primary Education to PhD programmes, in a stacked area plot.
+                    </p>
+                    <p>
+                        There is also a special category formed by the individuals who are no (longer) in education.
+                    </p>
+                    <p>
+                        On the right-hand side, next to the chart, a number of selectors can be found. These can be used to
+                        interact with the chart and display more specific subsets of the data. First, the map can be used
+                        to select a particular region in Denmark. By clicking the avatars below, it is possible to show
+                        data for women or men, respectively. Finally, pressing the 'cross' icon resets the visualisation.
+                    </p>
+                    <p>
+                        A few interesting observations can be made in this plot. As one could expect, the number of people
+                        in education drops significantly between 18 and 29 years of age. However, we see that the number
+                        drops sharply between the ages of 18 and 20 but then a large portion of the population gets to higher education.
+                    </p>
+                    <p>
+                        A few interesting observations can be made in this plot. As one could expect, the number of people
+                        in education drops significantly between 18 and 29 years of age. However, we see that the number
+                        drops sharply between the ages of 18 and 20 but then a large portion of the population gets to higher education.
+                    </p>
+                    <p>
+                        Coming to university education, we can see that there is a large difference in the number of females
+                        and males attending universities. Women outnumber men both in general and in each individual region.
+                    </p>
+                    <p>
+                        Coming to university education, we can see that there is a large difference in the number of females
+                        and males attending universities. Women outnumber men both in general and in each individual region.
+                    </p>
+                    <p>
+                        Comparing university education in different regions provides some interesting insight, too. We can
+                        clearly see that the portion of the population attending higher education is largest in the neighbourhood
+                        of Denmark's capital. On the other end of the rank, we would find the Zealand Region (Region Sjælland)
+                    </p>
                 </div>
             </section>
         </div>

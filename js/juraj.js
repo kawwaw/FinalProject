@@ -10,7 +10,7 @@ selectedGender = "Total";
 //highest fulfilled education scales
 var x = d3.scaleLinear().range([0, highestEdW]),
     y = d3.scaleLinear().range([highestEdH, 0]),
-    z = d3.scaleOrdinal(d3.schemeCategory10);
+    z = d3.scaleOrdinal(d3.schemeSet3);
 
 var stack = d3.stack();
 
@@ -117,7 +117,7 @@ function ready(error, regions, data, edu) {
             d3.select("#male-avatar").style("border-color", "transparent");
         });
 
-    d3.select("#reset-ongoing-plot")
+    d3.select("#reset-ongoing-edu-plot")
         .on("click", function (d) {
             var className = "." + selectedRegion;
             d3.selectAll(className).style("fill", "lightgrey");
@@ -207,9 +207,8 @@ function createMap(regions, data, selector) {
     allpaths
         .data(regions.features)
         .on("mouseover", function (d) {
-            // console.log(getPrettyRegionName(d));
             var className = "." + getPrettyRegionName(d);
-            d3.selectAll(className).style("fill", "orange");
+            d3.selectAll(className).style("fill", "#FFAB40");
         })
         //check selected region before setting fill back to default
         .on("mouseout", function (d) {
@@ -224,11 +223,11 @@ function createMap(regions, data, selector) {
 
             selectedRegion = getPrettyRegionName(d);
 
-            update(stack(data.filter(function (d) { console.log(getPrettyString(d.region)); return d.sex === selectedGender
+            update(stack(data.filter(function (d) { return d.sex === selectedGender
                 && getPrettyString(d.region) === selectedRegion})));
 
             className = "." + getPrettyRegionName(d);
-            d3.selectAll(className).style("fill", "orange");
+            d3.selectAll(className).style("fill", "#FFAB40");
         });
 
     var Action = function (d, c) {
