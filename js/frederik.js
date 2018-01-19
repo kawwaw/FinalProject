@@ -67,7 +67,6 @@ function frederik() {
             }
         });
 
-
         function filterByLevelAndGender(level, gender) {
             var filteredByGender = preparedData.filter(function(d) {
                 return d.gender === genders[gender];
@@ -80,20 +79,11 @@ function frederik() {
 
             return obj;
         }
-        function chooseColor(value) {
-            if (value <= 900) {
-                return 1
-            } else if (value > 900 && value < 1000) {
-                return 2;
-            } else if (value > 1000 && value <= 2000) {
-                return 3;
-            } else {
-                return 4;
-            }
-        }
-        var color = d3.scaleThreshold()
-                        .domain(d3.range(0, 10))
-                        .range(d3.schemeReds[9]);
+
+        var color = d3.scaleSequential()
+                        .domain([0, 7000])
+                        .interpolator(d3.interpolateReds);
+
         var selectedLevel = 'H10';
         var selectedGender = 'A';
 
@@ -105,7 +95,7 @@ function frederik() {
             svg.selectAll('path')
                 .transition()
                 .style('fill', function(d) {
-                    return color(regionToValue[d.properties.REGIONNAVN] / 700);
+                    return color(regionToValue[d.properties.REGIONNAVN]);
                 });
         });
 
@@ -117,7 +107,7 @@ function frederik() {
             svg.selectAll('path')
                 .transition()
                 .style('fill', function(d) {
-                    return color(regionToValue[d.properties.REGIONNAVN] / 700);
+                    return color(regionToValue[d.properties.REGIONNAVN]);
                 });
         });
 
@@ -128,7 +118,7 @@ function frederik() {
             svg.selectAll('path')
                 .transition()
                 .style('fill', function(d) {
-                    return color(regionToValue[d.properties.REGIONNAVN] / 700);
+                    return color(regionToValue[d.properties.REGIONNAVN]);
                 });
         });
 
@@ -140,7 +130,7 @@ function frederik() {
             .enter()
             .append('path')
             .style('fill', function(d) {
-                return color(regionToValue[d.properties.REGIONNAVN] / 700);
+                return color(regionToValue[d.properties.REGIONNAVN]);
             })
             .style('stroke', 'black')
             .style('stroke-width', 1)
