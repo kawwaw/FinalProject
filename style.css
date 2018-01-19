@@ -26,6 +26,7 @@ html, body {
     font-size: 12px;
     background-color: #f7f7f7;
     min-width: 1200px;
+    max-width: 100vw;
 }
 h1 {
     padding: 24px 36px;
@@ -75,11 +76,29 @@ h2, h3 {
     position: relative;
 }
 #introduction {
-    width: 96%;
-    margin: 0 1% 24px 1%;
-    height: auto;
-    min-height: 0;
-    font-size: 1.1em;
+    background: url("images/bgr.jpg");
+    background-size: cover;
+    background-position: center;
+}
+#introduction h1 {
+    font-size: 28px;
+    font-weight: 100;
+    font-family: 'Roboto', sans-serif;
+}
+.divider {
+    width: 24px;
+    height: 1px;
+    margin: 16px auto;
+    background-color: #FF9800;
+    opacity: 0.5;
+}
+#introduction p {
+    width: 40%;
+    padding: 20px 0;
+    margin: 0 auto;
+    font-size: 18px;
+    line-height: 48px;
+    font-weight: 300;
 }
 .detail-container {
     padding-top: 12px;
@@ -169,7 +188,7 @@ li {
 }
 #ongoing-education, #areasvg {
     width: 100%;
-    height: 500px;
+    height: 510px;
     float: left;
 }
 #ongoing-education-selector, #area-education-selector {
@@ -179,7 +198,7 @@ li {
     padding: 24px;
     position: relative;
 }
-#ongoing-education-selector .avatar {
+.avatar {
     width: 128px;
     height: 128px;
     margin: 24px;
@@ -189,7 +208,7 @@ li {
     -o-transition-duration: 0.2s;
     transition-duration: 0.2s;
 }
-#ongoing-education-selector .avatar:hover {
+.avatar:hover {
     width: 136px;
     height: 136px;
     margin: 20px;
@@ -219,7 +238,7 @@ li {
     width: 66%;
     float: left;
 }
-#reset-ongoing-plot {
+#reset-ongoing-edu-plot, #reset-ongoing-plot {
     width: 24px;
     height: 24px;
     top: 456px;
@@ -232,7 +251,7 @@ li {
     transition-duration: 0.2s;
     cursor: pointer;
 }
-#reset-ongoing-plot:hover {
+#reset-ongoing-edu-plot:hover, #reset-ongoing-plot {
     width: 30px;
     height: 30px;
     margin: -3px;
@@ -256,28 +275,36 @@ div.tooltip {
 }
 
 #menu {
+    width: calc(100vw - 2%);
     margin: 0;
-    padding: 0;
     position: fixed;
-    left: 1%;
+    padding: 0 1%;
     top: 10px;
     list-style-type: none;
     z-index: 70;
 }
 
 #menu li {
+    width: 23%;
     float: left;
-    margin: 0 10px 0 0;
+    margin: 0 1.33%;
     font-size: 14px;
 }
-
+#menu li:first-child {
+    margin-left: 0;
+}
+#menu li:last-child {
+    margin-right: 0;
+}
 #menu a {
+    width: 100%;
     float: left;
-    padding: 10px 20px;
+    padding: 10px 0;
     background-color: #fff;
     color: #333;
     text-decoration: none;
     border-radius: 3px;
+    text-align: center;
     -webkit-transition-duration: 0.2s;
     -moz-transition-duration: 0.2s;
     -ms-transition-duration: 0.2s;
@@ -286,16 +313,19 @@ div.tooltip {
 }
 #menu a:hover {
     color: #ffffff;
-    background-color: #FFB74D;
+    background-color: #FFCC80;
     -webkit-transition-duration: 0.3s;
     -moz-transition-duration: 0.3s;
     -ms-transition-duration: 0.3s;
     -o-transition-duration: 0.3s;
     transition-duration: 0.3s;
 }
+#menu a:active {
+    background-color: #FF9100;
+}
 #menu .active a {
     color: #fff;
-    background-color: #FF9800;
+    background-color: #FFAB40;
 }
 #level-menu {
   width: 47%;
@@ -386,10 +416,12 @@ div.tooltip {
 .description-container p {
     color: #ffffff;
     font-size: 16px;
-    text-align: center;
     max-width: 60%;
     position: relative;
     margin: 0 auto;
+    text-align: justify;
+    line-height: 24px;
+    padding: 6px 0;
     opacity: 0;
     -webkit-transition: opacity, bottom 0.4s;
     -moz-transition: opacity, bottom 0.4s;
