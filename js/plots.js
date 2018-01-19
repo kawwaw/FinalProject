@@ -22,15 +22,37 @@ function init() {
     var areaW = +areasvg.node().getBoundingClientRect().width;
     var areaH = +areasvg.node().getBoundingClientRect().height;
 
+    var xScale = d3.scaleBand()
+                     .range([0 + 40, areaW - 40])
+                     .paddingInner(0.05);
 
-    var keys = ['H10', 'H20', 'H30', 'H35', 'H40', 'H50', 'H60', 'H70', 'H80', 'H90']
-    var stack = d3.stack()
-        .keys(keys);
+    var yScale = d3.scaleLinear()
+                     .range([areaH - 40, 40])
+                     .nice();
+
+    var yAxis = d3.axisLeft()
+        .ticks(5);
+
+
+
+    var areaToPlot = d3.area()
+                         .x(function(d, i) { return xScale(i); })
+                         .y0(function(d) { return yScale(d[0]); })
+                         .y1(function(d) { return yScale(d[1]); });
+
+    var keys = ['H10', 'H20', 'H30', 'H35', 'H40', 'H50', 'H60', 'H70', 'H80', 'H90'];
+    var stack = d3.stack().keys(keys);
+
+    var yAxisSVG = d3.select('#areasvg')
+        .attr('class', 'axis')
+        .attr('transform', 'translate(40,0)')
+        .attr('stroke-width', 0);
 
     d3.queue()
         .defer(d3.json, 'regioner.geojson')
         //.defer(d3.tsv, 'HFUDD20.txt')
-        .defer(d3.tsv, 'HFUDD20area3.txt')
+        //.defer(d3.tsv, 'HFUDD20area3.txt')
+        .defer(d3.tsv, 'data/HFUDD20area4.txt')
         .await(ready);
 
     function ready(error, regions, area1) {
@@ -43,14 +65,14 @@ function init() {
 
         // create selector map of Denmark
         allpathsKW = mapsvg.selectAll('path')
-                       .data(regions.features)
-                       .enter()
-                       .append('path')
-                       .attr('d', path)
-                       .attr('class', function(d) { return d.properties.REGIONKODE })
-                       .style('fill', 'lightgrey')
-                       .style('stroke', 'grey')
-                       .style('stroke-width', 0.5);
+                         .data(regions.features)
+                         .enter()
+                         .append('path')
+                         .attr('d', path)
+                         .attr('class', function(d) { return d.properties.REGIONKODE })
+                         .style('fill', 'lightgrey')
+                         .style('stroke', 'grey')
+                         .style('stroke-width', 0.5);
 
         allpathsKW
             .data(regions.features)
@@ -63,44 +85,40 @@ function init() {
             })
             .on('click', function(d) {
                 UptateVisuals(area1, d.properties.REGIONNAVN);
-                console.log("klik");
+                console.log('klik');
             });
 
         var Action = function(d, c) {
             allpathsKW
-                .filter(function(v) {
-                    //console.log(v.properties.REGIONKODE);
-                    return v.properties.REGIONKODE == d.properties.REGIONKODE; })
+                .filter(function(v) { return v.properties.REGIONKODE == d.properties.REGIONKODE; })
                 .style('fill', c);
         }
-// d er regionsnavn
+        // d er regionsnavn
         var UptateVisuals = function(area1, regnavn) {
             var selection = area1.filter(function(v) {
-                console.log(v.region);
                 return v.region == regnavn;
-                //return v.region == 'Region Hovedstaden';
-            });
-
-            console.log("selectiontjek");
-            console.log(selection);
+            })
+                .filter(function(v) {
+                    return v.sex == 'Total';})
+            ;
 
             var series = stack(selection);
 
-            console.log("seriestjek");
-            console.log(series);
+            yScale.domain([0, d3.max(selection, function(d) {
+                return d.H10 + d.H20 + d.H30 + d.H35 + d.H40 + d.H50 + d.H60 + d.H70 + d.H80 + d.H90;
+            })]);
+
+            yAxis.scale(yScale);
+
+            yAxisSVG.call(yAxis);
+
 
             var areapaths = d3.select('#areasvg')
-                .selectAll('path')
-                .data(series)
-                .attr('d', areaToPlot)
-                ;
+                                .selectAll('path')
+                                .data(series)
+                                .attr('d', areaToPlot);
 
-
-
-
-        }
-
-
+        };
         makeAreaPlot(area1);
     }
 
@@ -125,12 +143,11 @@ function init() {
 
 
 
-
         var selectedData = area1.filter(function(v) {
             //console.log(v.region == "All Denmark");
-            return v.region == "All Denmark";
-            //return v.region == 'Region Hovedstaden';
-        });
+            return v.region == 'All Denmark';})
+            .filter(function(v) {
+                return v.sex == 'Total';});
 
         console.log(selectedData);
 
@@ -140,33 +157,15 @@ function init() {
         console.log(series);
 
         //Set up scales
-        var xScale = d3.scaleBand()
-                         .domain(d3.range(selectedData.length))
-                         .range([0 + 40, areaW - 40])
-                         .paddingInner(0.05);
-
-        var yScale = d3.scaleLinear()
-                         .domain([0, d3.max(selectedData, function(d) {
-                                      return d.H10 + d.H20 + d.H30 + d.H35 + d.H40 + d.H50 + d.H60 + d.H70 + d.H80 + d.H90;
-                                  })])
-                         .range([areaH - 40, 40])
-                         .nice();
+        xScale.domain(d3.range(selectedData.length));
+        yScale.domain([0, d3.max(selectedData, function(d) {
+                           return d.H10 + d.H20 + d.H30 + d.H35 + d.H40 + d.H50 + d.H60 + d.H70 + d.H80 + d.H90;
+                       })]);
 
         //color scale
         var colors = d3.scaleOrdinal(d3.schemeCategory10);
 
         //Define area generator
-        areaToPlot = d3.area()
-            .x(function(d, i) {
-                // console.log("d");
-                // console.log(d);
-                return xScale(i); })
-            .y0(function(d) { return yScale(d[0]); })
-            .y1(function(d) { return yScale(d[1]); })
-        ;
-
-
-
         var areapaths = d3.select('#areasvg')
                             .selectAll('path')
                             .data(series)
@@ -192,9 +191,7 @@ function init() {
                          return area1[d].time;
                      });
 
-        yAxis = d3.axisLeft()
-                    .scale(yScale)
-                    .ticks(5);
+        yAxis.scale(yScale);
 
         //Create axes
         d3.select('#areasvg')
@@ -210,12 +207,9 @@ function init() {
             .attr('transform', 'translate(' + -xScale(0) / 2 + ',480)')
             .call(xAxis2)
             .attr('stroke-width', 0);
-        d3.select('#areasvg')
-            .append('g')
-            .attr('class', 'axis')
-            .attr('transform', 'translate(40,0)')
-            .call(yAxis)
-            .attr('stroke-width', 0);
+
+        yAxisSVG.append('g')
+            .call(yAxis);
 
     }
 }

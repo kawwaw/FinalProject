@@ -1,4 +1,3 @@
-
 $(document).ready(function() {
     $('#fullpage').fullpage({
         // Navigation
@@ -42,7 +41,6 @@ function frederik() {
     function ready(error, geodata, data) {
         if (error) throw error;
 
-        console.log(data);
 
         var genders = {
             'M': 'Men',
@@ -104,7 +102,6 @@ function frederik() {
             $(this).addClass('active');
             selectedLevel = $(this).find('a').data('value');
             var regionToValue = filterByLevelAndGender(selectedLevel, selectedGender);
-            console.log(regionToValue);
             svg.selectAll('path')
                 .transition()
                 .style('fill', function(d) {
@@ -112,12 +109,22 @@ function frederik() {
                 });
         });
 
-        $('#gender-menu li').click(function() {
-            $('#gender-menu li').removeClass('active');
+        $('.region-avatar').click(function() {
+            $('.region-avatar').removeClass('active');
             $(this).addClass('active');
-            selectedGender = $(this).find('a').data('value');
+            selectedGender = $(this).data('value');
             var regionToValue = filterByLevelAndGender(selectedLevel, selectedGender);
-            console.log(regionToValue);
+            svg.selectAll('path')
+                .transition()
+                .style('fill', function(d) {
+                    return color(regionToValue[d.properties.REGIONNAVN] / 700);
+                });
+        });
+
+        $('#reset-region-plot').click(function() {
+            $('.region-avatar').removeClass('active');
+            selectedGender = $(this).data('value');
+            var regionToValue = filterByLevelAndGender(selectedLevel, selectedGender);
             svg.selectAll('path')
                 .transition()
                 .style('fill', function(d) {
@@ -127,7 +134,6 @@ function frederik() {
 
         var regionToValue = filterByLevelAndGender('H10', 'A');
 
-        console.log('obj', filterByLevelAndGender('H20', 'W'));
         svg.append('g')
             .selectAll('path')
             .data(geodata.features)
