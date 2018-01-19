@@ -51,11 +51,11 @@ function init() {
     d3.queue()
         .defer(d3.json, 'regioner.geojson')
         //.defer(d3.tsv, 'HFUDD20.txt')
-        .defer(d3.tsv, 'HFUDD20area3.txt')
+        //.defer(d3.tsv, 'HFUDD20area3.txt')
         .defer(d3.tsv, 'data/HFUDD20area4.txt')
         .await(ready);
 
-    function ready(error, regions, area1, hfudd) {
+    function ready(error, regions, area1) {
         if (error) {
             throw error;
         }
@@ -97,7 +97,10 @@ function init() {
         var UptateVisuals = function(area1, regnavn) {
             var selection = area1.filter(function(v) {
                 return v.region == regnavn;
-            });
+            })
+                .filter(function(v) {
+                    return v.sex == 'Total';})
+            ;
 
             var series = stack(selection);
 
@@ -107,12 +110,8 @@ function init() {
 
             yAxis.scale(yScale);
 
-            d3.select('#areasvg')
-                .append('g')
-                .attr('class', 'axis')
-                .attr('transform', 'translate(40,0)')
-                .call(yAxis)
-                .attr('stroke-width', 0);
+            yAxisSVG.call(yAxis);
+
 
             var areapaths = d3.select('#areasvg')
                                 .selectAll('path')
@@ -146,9 +145,9 @@ function init() {
 
         var selectedData = area1.filter(function(v) {
             //console.log(v.region == "All Denmark");
-            return v.region == 'All Denmark';
-            //return v.region == 'Region Hovedstaden';
-        });
+            return v.region == 'All Denmark';})
+            .filter(function(v) {
+                return v.sex == 'Total';});
 
         console.log(selectedData);
 
