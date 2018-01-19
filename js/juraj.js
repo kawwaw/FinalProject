@@ -168,6 +168,7 @@ function ready(error, regions, data, edu) {
             return d.substr(0, 3)
         })
         .style("text-anchor", "start")
+        .style("dx", "0.35em")
         .style("font-size", 15)
         .append("svg:title")
         .text(function (d) {
