@@ -357,8 +357,12 @@ div.tooltip {
 #region-menu {
   width: 43%;
   float:right;
-  margin-top: 300px;
   text-align: left;
+  margin-top: 140px;
+}
+#region-menu p {
+  margin: 5px 0 20px 0;
+  width: 280px;
 }
 .description-container {
     width: 100%;
