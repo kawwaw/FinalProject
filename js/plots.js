@@ -152,6 +152,7 @@ function init() {
         console.log(selectedData);
 
         var series = stack(selectedData);
+        console.log("selectedData");
         console.log(selectedData);
         console.log('series');
         console.log(series);
@@ -179,16 +180,13 @@ function init() {
         xAxis = d3.axisBottom()
                     .scale(xScale)
                     .tickFormat(function(d) {
-                        //console.log("tjek_d" + d);
-                        //console.log("tjek_area1" + area1[d].age);
-                        return area1[d].age;
+                        //console.log(selectedData[d].age);
+                        return selectedData[d].age;
                     });
         xAxis2 = d3.axisBottom()
                      .scale(xScale)
                      .tickFormat(function(d) {
-                         //console.log("tjek_d" + d);
-                         //console.log("tjek_area1" + area1[d].time);
-                         return area1[d].time;
+                         return selectedData[d].time;
                      });
 
         yAxis.scale(yScale);
@@ -197,9 +195,10 @@ function init() {
         d3.select('#areasvg')
             .append('g')
             .attr('class', 'axis')
-            .attr('transform', 'translate(' + -xScale(0) / 2 + ',460)')
+            //.attr('transform', 'translate(' + -xScale(0)/2 + ',460)')
+            .attr('transform', 'translate(0,460)')
             .call(xAxis)
-            .attr('stroke-width', 0);
+            .attr('stroke-width', 1);
 
         d3.select('#areasvg')
             .append('g')
