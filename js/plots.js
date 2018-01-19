@@ -6,15 +6,14 @@ function init() {
     var mapW = +mapsvg.node().getBoundingClientRect().width;
     var mapH = +mapsvg.node().getBoundingClientRect().height;
     var Mercator = d3.geoMercator()
-                       .translate([mapW / 2, mapH / 2])
+                       .translate([mapW / 3, mapH / 2])
                        .scale(3000)
-                       .center([10.21076, 56.2]);  //Århus
+                       .center([10.21076, 56.2]);
     //create path variable
     var path = d3.geoPath()
                    .projection(Mercator);
-    var offsetMercator = Mercator.translate();
 
-    selectedRegion = "All Denmark";
+    var selectedRegion = "All Denmark";
     selectedGender = "Total";
 
     // settings for the stacked area map
@@ -30,8 +29,6 @@ function init() {
     var yAxis = d3.axisLeft()
         .ticks(5);
 
-
-
     var areaToPlot = d3.area()
         .curve(d3.curveNatural)
         .x(function(d, i) { return xScale(d.data.age); })
@@ -39,12 +36,22 @@ function init() {
          .y1(function(d) { return yScale(d[1]); });
 
     var keys = ['H10', 'H20', 'H30', 'H35', 'H40', 'H50', 'H60', 'H70', 'H80', 'H90'];
+    var longKeys = [
+        "H10 Primary education",
+        "H20 Upper secondary education",
+        "H30 Vocational Education and Training (VET)",
+        "H35 Qualifying educational programmes",
+        "H40 Short cycle higher education",
+        "H50 Vocational bachelors educations",
+        "H60 Bachelors programmes",
+        "H70 Masters programmes",
+        "H80 PhD programmes",
+        "H90 Not stated"
+    ];
     var stack = d3.stack().keys(keys);
 
     d3.queue()
         .defer(d3.json, 'regioner.geojson')
-        //.defer(d3.tsv, 'HFUDD20.txt')
-        //.defer(d3.tsv, 'HFUDD20area3.txt')
         .defer(d3.tsv, 'data/HFUDD20area4.txt')
         .await(ready);
 
@@ -158,18 +165,11 @@ function init() {
 
 
         var selectedData = area1.filter(function(v) {
-            //console.log(v.region == "All Denmark");
             return v.region == 'All Denmark';})
             .filter(function(v) {
                 return v.sex == 'Total';});
 
-        console.log(selectedData);
-
         var series = stack(selectedData);
-        console.log("selectedData");
-        console.log(selectedData);
-        console.log('series');
-        console.log(series);
 
         //Set up scales
         xScale.domain([18,29]);
@@ -221,5 +221,49 @@ function init() {
             .attr("id", "yaxis")
             .call(yAxis);
 
+        var svgLegend = d3.select("#area-education-legend").append("svg")
+            .attr("width", areaW)
+            .attr("height", 50);
+
+        var dataL = 20;
+        var offset = areaW / keys.length;
+
+        var legend = svgLegend.selectAll('#area-education-legend')
+            .data(keys)
+            .enter().append('g')
+            .attr("transform", function (d, i) {
+                if (i === 0) {
+                    return "translate(30,0)"
+                } else {
+                    dataL += offset;
+                    return "translate(" + (dataL) + ",0)"
+                }
+            });
+
+        legend.append('circle')
+            .attr("cx", 0)
+            .attr("cy", 8)
+            .attr("r", 8)
+            .style("fill", function (d, i) {
+                return z(i)
+            })
+            .append("svg:title")
+            .text(function (d,i) {
+                return longKeys[i];
+            });
+
+        legend.append('text')
+            .attr("x", 20)
+            .attr("y", 12)
+            .text(function (d, i) {
+                return d.substr(0, 3)
+            })
+            .style("text-anchor", "start")
+            .style("dx", "0.35em")
+            .style("font-size", 15)
+            .append("svg:title")
+            .text(function (d,i) {
+                return longKeys[i];
+            });
     }
 }

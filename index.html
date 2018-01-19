@@ -10,33 +10,22 @@
     <script src="jquery-3.2.1.min.js"></script>
     <script type="text/javascript" src="jquery.fullpage.js"></script>
     <script src="https://d3js.org/d3.v4.min.js"></script>
-    <script src="https://d3js.org/d3-interpolate.v1.min.js"></script>
     <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
-    <!-- herunder er geoprpjektion pakker - ved ikke hvilke der er vigtige-->
-    <script src="https://d3js.org/d3-array.v1.min.js"></script>
-    <script src="https://d3js.org/d3-geo.v1.min.js"></script>
-    <script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
-    <script>
-        var aitoff = d3.geoAitoff();
-    </script>
-
-
-
 </head>
 
 <body>
     <ul id="menu">
         <li data-menuanchor="first" class="active">
-            <a href="#first">First section</a>
+            <a href="#first">Introduction</a>
         </li>
         <li data-menuanchor="second">
-            <a href="#second">Highest Education Level Achieved</a>
+            <a href="#second">Highest Education Achieved</a>
         </li>
         <li data-menuanchor="third">
             <a href="#third">Ongoing Education</a>
         </li>
         <li data-menuanchor="fourth">
-            <a href="#fourth">Where they end up</a>
+            <a href="#fourth">Where They End Up</a>
         </li>
     </ul>
 
@@ -50,34 +39,26 @@
                     between the years 2006 when they reached adulthood and 2017 when only about a fifth of the studied group were still in education.
                 </p>
                 <div class="divider"></div>
-                <div class="description-container light-green">
-                    <h2>Description</h2>
-                    <p>
-                        <div class="description-container light-green">
-                            <h2>Description</h2>
+                <div class="description-container grey">
+                    <h2>Authors & References</h2>
                     <p>
                         Education in Denmark, final project in the course Interactive data exploration for the web, University of Copenhagen, January 2018.
                     </p>
-                    <ul>References:
-                        <li>
-                            Map of Denmark
-                            Danmarks Administrative Geografiske Inddeling (DAGI)
-                            copied from: https://github.com/Neogeografen/dagi/tree/master/geojson
-                        </li>
-                        <li>
-                            Educational data
-                            Statistics Denmark, StatBank Denmark, Table HFUDD20. The table contains data of the Danish populations enrolled and fulfilled educations, age, gender, and place of residence.
-                        </li>
-                        <li>
-                            Avatars and pictures
-                        </li>
-
-
-
-                    </ul>
+                    <p>References:</p>
+                    <div id="references">
+                        <p>Map of Denmark</p>
+                        <p>Danmarks Administrative Geografiske Inddeling (DAGI)</p>
+                        <p>Copied from: https://github.com/Neogeografen/dagi/tree/master/geojson</p>
+                        <br/>
+                        <p>Educational data</p>
+                        <p>Statistics Denmark, StatBank Denmark, Table HFUDD20. The table contains data of the Danish populations enrolled and fulfilled educations, age, gender, and place of residence.</p>
+                        <br/>
+                        <p>Avatars and icons</p>
+                        <p><a href="http://freepik.com" style="color: black;">freepik.com</a></p>
+                        <br/>
+                    </div>
                     <p>
-                        Made by
-                        Juraj Orszag, Frederik Bøgelund Larsen and Kamma Westergaard
+                        Made by: Juraj Orszag, Frederik Bøgelund Larsen and Kamma Westergaard
                     </p>
                 </div>
             </section>
@@ -93,17 +74,14 @@
                     <p>Use the reset button to return to the whole danish population</p>
                     <svg id="mapsvg"></svg>
                     <img class="avatar" id="female-avatarKW" src="images/female-avatar.png" title="Female"/>
-                    <img id="reset-ongoing-plot" src="images/close.svg" title="Reset visualization"></img>
+                    <img id="reset-ongoing-plot" src="images/close.svg" title="Reset visualization" />
                     <img class="avatar" id="male-avatarKW" src="images/male-avatar.png" title="Male"/>
                 </div>
 
                 <div class="description-container light-green">
                     <h2>Description</h2>
                     <p>
-                        <div class="description-container light-green">
-                            <h2>Description</h2>
-                    <p>
-                    This part illustrates how the cohort of young people born in 1987 over time graduate educations. The plot follows the same cohort over time. Chances in the total population number corresponds to either net immigration or net emmigration og the area selected.
+                        This part illustrates how the cohort of young people born in 1987 over time graduate educations. The plot follows the same cohort over time. Chances in the total population number corresponds to either net immigration or net emmigration og the area selected.
                     </p>
                     <p>
                         The top level "not stated" is primarily immigrants, that has not graduated a Danish educational institution yet. When they do, they will be placed in the other categories.
@@ -112,9 +90,6 @@
                         There are big differences in the education and migration patterns between regions. Especially for the high educacional levels. Region Hovedstaden has a large population of people with masters degrees compared to any other region.
                     </p>
                 </div>
-
-
-               
             </section>
         </div>
         <div class="section">
@@ -127,13 +102,13 @@
                     <h3>Select a Region on the Map</h3>
                     <svg id="ongoing-education-map"></svg>
                     <img class="avatar" id="female-avatar" src="images/female-avatar.png" title="Female"/>
-                    <img id="reset-ongoing-edu-plot" src="images/close.svg" title="Reset visualization"></img>
+                    <img id="reset-ongoing-edu-plot" src="images/close.svg" title="Reset visualization" />
                     <img class="avatar" id="male-avatar" src="images/male-avatar.png" title="Male"/>
                 </div>
-                <div class="description-container light-green">
+                <div class="description-container light-green wide">
                     <h2>Description</h2>
                     <p>
-                        This visualisation shows the relative number of Danish residents born in 1988 attending each of the
+                        This visualisation shows the relative number of Danish residents born in 1987 attending each of the
                         educational levels recognised in Denmark, from Primary Education to PhD programmes, in a stacked area plot.
                     </p>
                     <p>
@@ -192,12 +167,12 @@
                   <li class="level-menu-item "><a class="level-button" data-value="H60" target="_blank">Bachelors programmes</a></li>
                   <li class="level-menu-item "><a class="level-button" data-value="H70" target="_blank">Masters programmes</a></li>
                   <li class="level-menu-item "><a class="level-button" data-value="H80" target="_blank">PhD programmes</a></li>
-                  <li class="level-menu-item "><a class="level-button" data-value="H90" target="_blank">Hot started</a></li>
+                  <li class="level-menu-item "><a class="level-button" data-value="H90" target="_blank">Not stated</a></li>
               </ul>
               <strong>Choose a gender</strong>
               <div id="region-gender-menu" class="selector">
                     <img class="avatar region-avatar" data-value="W" id="region-female-avatar" src="images/female-avatar.png" title="Female"/>
-                    <img id="reset-region-plot" src="images/close.svg" data-value="A" title="Reset visualization"></img>
+                    <img id="reset-region-plot" src="images/close.svg" data-value="A" title="Reset visualization"/>
                     <img class="avatar region-avatar" id="region-male-avatar" data-value="M" src="images/male-avatar.png" title="Male"/>
                 </div>
             </div>

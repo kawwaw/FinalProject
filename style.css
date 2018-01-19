@@ -108,6 +108,9 @@ h2, h3 {
     color: rgba(0,0,0,0.38);
     font-weight: 300;
 }
+.grey {
+    background-color: #f0f0f0;
+}
 .indigo {
     background-color: #3F51B5;
 }
@@ -228,7 +231,7 @@ li {
     width: 100%;
     height: 300px;
 }
-#ongoing-education-legend {
+#ongoing-education-legend, #area-education-legend {
     width: 100%;
     height: 50px;
     padding-top: 16px;
@@ -397,10 +400,13 @@ div.tooltip {
     padding: 18px;
     color: #fff;
 }
+#introduction .description-container h2 {
+    color: rgba(0,0,0,0.5);
+}
 .description-container p {
     color: #ffffff;
-    font-size: 16px;
-    max-width: 60%;
+    font-size: 1.4em;
+    width: 60%;
     position: relative;
     margin: 0 auto;
     text-align: justify;
@@ -413,6 +419,9 @@ div.tooltip {
     -o-transition: opacity, bottom 0.4s;
     transition: opacity, bottom 0.4s;
 }
+.description-container.wide p {
+    min-width: 865px;
+}
 .description-container:hover p {
     opacity: 1;
     -webkit-transition-duration: 0.5s;
@@ -420,6 +429,9 @@ div.tooltip {
     -ms-transition-duration: 0.5s;
     -o-transition-duration: 0.5s;
     transition-duration: 0.5s;
+}
+#introduction .description-container p {
+    color: black;
 }
 #reset-region-plot {
     width: 24px;
@@ -470,4 +482,16 @@ div.tooltip {
     font-size: 12px;
     padding-bottom: 16px;
     font-weight: 300;
+}
+#references {
+    width: 40%;
+    margin: 0 auto;
+}
+#references p {
+    font-size: 1.2em;
+    width: 100%;
+    padding: 0;
+    line-height: 16px;
+    margin: 0;
+    max-width: none;
 }
