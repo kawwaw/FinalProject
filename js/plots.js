@@ -30,6 +30,11 @@ function init() {
                      .range([areaH - 40, 40])
                      .nice();
 
+    var yAxis = d3.axisLeft()
+        .ticks(5);
+
+
+
     var areaToPlot = d3.area()
                          .x(function(d, i) { return xScale(i); })
                          .y0(function(d) { return yScale(d[0]); })
@@ -38,13 +43,19 @@ function init() {
     var keys = ['H10', 'H20', 'H30', 'H35', 'H40', 'H50', 'H60', 'H70', 'H80', 'H90'];
     var stack = d3.stack().keys(keys);
 
+    var yAxisSVG = d3.select('#areasvg')
+        .attr('class', 'axis')
+        .attr('transform', 'translate(40,0)')
+        .attr('stroke-width', 0);
+
     d3.queue()
         .defer(d3.json, 'regioner.geojson')
         //.defer(d3.tsv, 'HFUDD20.txt')
         .defer(d3.tsv, 'HFUDD20area3.txt')
+        .defer(d3.tsv, 'data/HFUDD20area4.txt')
         .await(ready);
 
-    function ready(error, regions, area1) {
+    function ready(error, regions, area1, hfudd) {
         if (error) {
             throw error;
         }
@@ -89,6 +100,20 @@ function init() {
             });
 
             var series = stack(selection);
+
+            yScale.domain([0, d3.max(selection, function(d) {
+                return d.H10 + d.H20 + d.H30 + d.H35 + d.H40 + d.H50 + d.H60 + d.H70 + d.H80 + d.H90;
+            })]);
+
+            yAxis.scale(yScale);
+
+            d3.select('#areasvg')
+                .append('g')
+                .attr('class', 'axis')
+                .attr('transform', 'translate(40,0)')
+                .call(yAxis)
+                .attr('stroke-width', 0);
+
             var areapaths = d3.select('#areasvg')
                                 .selectAll('path')
                                 .data(series)
@@ -167,9 +192,7 @@ function init() {
                          return area1[d].time;
                      });
 
-        yAxis = d3.axisLeft()
-                    .scale(yScale)
-                    .ticks(5);
+        yAxis.scale(yScale);
 
         //Create axes
         d3.select('#areasvg')
@@ -185,12 +208,9 @@ function init() {
             .attr('transform', 'translate(' + -xScale(0) / 2 + ',480)')
             .call(xAxis2)
             .attr('stroke-width', 0);
-        d3.select('#areasvg')
-            .append('g')
-            .attr('class', 'axis')
-            .attr('transform', 'translate(40,0)')
-            .call(yAxis)
-            .attr('stroke-width', 0);
+
+        yAxisSVG.append('g')
+            .call(yAxis);
 
     }
 }
