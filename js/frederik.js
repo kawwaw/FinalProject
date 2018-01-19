@@ -67,7 +67,6 @@ function frederik() {
             }
         });
 
-
         function filterByLevelAndGender(level, gender) {
             var filteredByGender = preparedData.filter(function(d) {
                 return d.gender === genders[gender];
@@ -122,7 +121,7 @@ function frederik() {
                     return color(regionToValue[d.properties.REGIONNAVN]);
                 });
         });
-        
+
         var regionToValue = filterByLevelAndGender('H10', 'A');
 
         svg.append('g')
